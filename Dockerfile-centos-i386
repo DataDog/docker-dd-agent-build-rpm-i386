@@ -1,0 +1,4 @@
+FROM scratch
+MAINTAINER Remi Hakim @remh
+ADD centos5.tar.gz /
+CMD ["/bin/bash"]
