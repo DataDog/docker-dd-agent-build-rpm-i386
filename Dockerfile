@@ -41,20 +41,22 @@ RUN  linux32 yum -y install \
     perl-ExtUtils-MakeMaker \
     fakeroot
 
+# Install tar >> 1.23 so that Omnibus can use the -J option
+RUN \curl -o /tmp/tar123.tar.gz http://ftp.gnu.org/gnu/tar/tar-1.23.tar.gz
+RUN cd /tmp && tar -xzf /tmp/tar123.tar.gz
+RUN rm -f /bin/tar /bin/gtar
+RUN cd /tmp/tar-1.23 && FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/ && make && make install && ln -sf /bin/tar /bin/gtar
+
 RUN git config --global user.email "package@datadoghq.com"
 RUN git config --global user.name "Centos Omnibus Package"
 RUN git clone https://github.com/DataDog/dd-agent-omnibus.git
+# TODO: remove the checkout line after the merge to master
 RUN cd dd-agent-omnibus && \
-     linux32 /bin/bash -l -c "bundle install --binstubs"
+    git checkout etienne/omnibus-4-migration && \
+    linux32 /bin/bash -l -c "bundle install --binstubs"
 
-# Install tar >> 1.23 so that Omnibus can use the -J option
-RUN \curl -o /tmp/tar123.tar.gz http://ftp.gnu.org/gnu/tar/tar-1.23.tar.gz
-RUN cd /tmp && tar -xzf /tmp/tar123.tar.gz 
-RUN rm -f /bin/tar /bin/gtar
-RUN cd /tmp/tar-1.23 && FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/ && make && make install && ln -sf /bin/tar /bin/gtar 
-
-# This is a hack for rrdtool 
-RUN ln -s /usr/lib/perl5/5.8.8/i386-linux-thread-multi/CORE /usr/lib/perl5/CORE 
+# This is a hack for rrdtool
+RUN ln -s /usr/lib/perl5/5.8.8/i386-linux-thread-multi/CORE /usr/lib/perl5/CORE
 
 VOLUME ["/dd-agent-omnibus/pkg"]
 
