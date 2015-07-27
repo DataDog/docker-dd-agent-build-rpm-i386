@@ -52,7 +52,6 @@ RUN git config --global user.name "Centos Omnibus Package"
 RUN git clone https://github.com/DataDog/dd-agent-omnibus.git
 # TODO: remove the checkout line after the merge to master
 RUN cd dd-agent-omnibus && \
-    git checkout etienne/omnibus-4-migration && \
     linux32 /bin/bash -l -c "bundle install --binstubs"
 
 # This is a hack for rrdtool
