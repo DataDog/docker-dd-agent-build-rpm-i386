@@ -46,7 +46,7 @@ RUN linux32 yum -y install \
     fakeroot
 
 # Install tar >> 1.23 so that Omnibus can use the -J option
-RUN curl -o /tmp/tar123.tar.gz http://ftp.gnu.org/gnu/tar/tar-1.23.tar.gz && \ 
+RUN curl -o /tmp/tar123.tar.gz http://ftp.gnu.org/gnu/tar/tar-1.23.tar.gz && \
     cd /tmp && tar -xzf /tmp/tar123.tar.gz && \
     rm -f /bin/tar /bin/gtar && \
     cd /tmp/tar-1.23 && FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/ && make && make install && \
@@ -70,11 +70,10 @@ RUN curl -o /tmp/curl-7.46.0.tar.gz http://curl.askapache.com/download/curl-7.46
     cd /tmp && tar -xzf /tmp/curl-7.46.0.tar.gz && \
     cd /tmp/curl-7.46.0 && ./configure LIBS="-ldl" --host=i686-pc-linux-gnu --enable-static --prefix=/opt/curl --with-ssl=/opt/openssl && make all && make install && \
     cd - && rm -rf /tmp/curl-7.46.0 && rm -f /tmp/curl-7.46.0.tar.gz
-    
 
-RUN curl -o /tmp/git-2.7.0.tar.gz https://www.kernel.org/pub/software/scm/git/git-2.7.0.tar.gz
-RUN cd /tmp && tar -xzf /tmp/git-2.7.0.tar.gz
-RUN cd /tmp/git-2.7.0 && make configure && ./configure --with-ssl --prefix=/usr \
+RUN curl -o /tmp/git-2.7.0.tar.gz https://www.kernel.org/pub/software/scm/git/git-2.7.0.tar.gz && \
+    cd /tmp && tar -xzf /tmp/git-2.7.0.tar.gz && \
+    cd /tmp/git-2.7.0 && make configure && ./configure --with-ssl --prefix=/usr \
        OPENSSLDIR=/opt/openssl \
        CURLDIR=/opt/curl \
        CPPFLAGS="-I/opt/curl/include" \
