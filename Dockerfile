@@ -91,9 +91,11 @@ RUN git config --global user.email "package@datadoghq.com" && \
     git config --global user.name "Centos Omnibus Package" && \
     git clone https://github.com/DataDog/dd-agent-omnibus.git
 
-# TODO: remove the checkout line after the merge to master
 RUN cd dd-agent-omnibus && \
     linux32 /bin/bash -l -c "bundle install --binstubs"
+
+RUN git clone https://github.com/DataDog/integrations-extras.git
+RUN git clone https://github.com/DataDog/integrations-core.git
 
 # This is a hack for rrdtool
 RUN ln -s /usr/lib/perl5/5.8.8/i386-linux-thread-multi/CORE /usr/lib/perl5/CORE
@@ -101,6 +103,8 @@ RUN ln -s /usr/lib/perl5/5.8.8/i386-linux-thread-multi/CORE /usr/lib/perl5/CORE
 # bootstap our CERTS
 RUN /opt/curl/bin/curl -fsSL curl.haxx.se/ca/cacert.pem \
                        -o $(/bin/bash -l -c "ruby -ropenssl -e 'puts OpenSSL::X509::DEFAULT_CERT_FILE'")
+
+RUN echo -e '[datadog]\nname = Datadog, Inc.\nbaseurl = http://yum.datadoghq.com/rpm/i386/\nenabled=1\ngpgcheck=1\npriority=1\ngpgkey=http://yum.datadoghq.com/DATADOG_RPM_KEY.public' > /etc/yum.repos.d/datadog.repo
 
 VOLUME ["/dd-agent-omnibus/pkg"]
 
