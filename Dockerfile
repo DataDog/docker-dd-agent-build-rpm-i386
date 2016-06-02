@@ -53,7 +53,7 @@ RUN curl -o /tmp/tar123.tar.gz http://ftp.gnu.org/gnu/tar/tar-1.23.tar.gz && \
     ln -sf /bin/tar /bin/gtar && \
     cd - && rm -rf /tmp/tar123.tar.gz
 
-RUN curl -o /tmp/openssl-1.0.1r.tar.gz http://artfiles.org/openssl.org/source/openssl-1.0.1r.tar.gz && \
+RUN curl -o /tmp/openssl-1.0.1r.tar.gz http://artfiles.org/openssl.org/source/old/1.0.1/openssl-1.0.1r.tar.gz && \
     cd /tmp && tar -xzf /tmp/openssl-1.0.1r.tar.gz && \
     cd /tmp/openssl-1.0.1r && ./Configure linux-generic32 --openssldir=/opt/openssl && make && make install && \
     cd - && rm -rf /tmp/openssl-1.0.1r && rm /tmp/openssl-1.0.1r.tar.gz
